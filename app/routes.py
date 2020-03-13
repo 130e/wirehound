@@ -49,15 +49,15 @@ def logout():
     logout_user()
     return redirect(url_for('index'))
 
-@app.route('/upload', methods=['GET', 'POST'])
-@login_required
-def upload():
-    form = FileForm()
-    if form.validate_on_submit():
-        f = form.userfile.data
-        filename = secure_filename(f.filename)
-        f.save(os.path.join(
-            app.config['UPLOAD_FOLDER'], filename))
-        return redirect(url_for('index'))
+# @app.route('/upload', methods=['GET', 'POST'])
+# @login_required
+# def upload():
+    # form = FileForm()
+    # if form.validate_on_submit():
+        # f = form.userfile.data
+        # filename = secure_filename(f.filename)
+        # f.save(os.path.join(
+            # app.config['UPLOAD_FOLDER'], filename))
+        # return redirect(url_for('index'))
 
-    return render_template('uploadform.html', title='Upload', form=form)
+    # return render_template('uploadform.html', title='Upload', form=form)
