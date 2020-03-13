@@ -10,5 +10,5 @@ class LoginForm(FlaskForm):
     submit = SubmitField('Sign In')
 
 class FileForm(FlaskForm):
-    user_file = FileField('Traffic', validators=[FileRequired()])
+    userfile = FileField('Traffic file', validators=[FileRequired()])
     submit = SubmitField('Upload')

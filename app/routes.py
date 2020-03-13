@@ -7,12 +7,24 @@ import os
 from flask_login import current_user, login_user, logout_user, login_required
 from app.models import User
 
+# Dev note
+# I put the form into front page in its modal
+# remember redirect looks for function name not route url
+
 @app.route('/')
 @app.route('/index')
-@app.route('/filepage')
+@app.route('/filepage', methods=['GET', 'POST'] )
 @login_required
 def index():
-    return render_template('filepage.html', title='My Files')
+    form = FileForm()
+    if form.validate_on_submit():
+        f = form.userfile.data
+        filename = secure_filename(f.filename)
+        f.save(os.path.join(
+            app.config['UPLOAD_FOLDER'], filename))
+        return redirect(url_for('index'))
+
+    return render_template('filepage.html', title='My Files', form=form)
 
 @app.route('/login', methods=['GET', 'POST'])
 def login():
@@ -42,7 +54,7 @@ def logout():
 def upload():
     form = FileForm()
     if form.validate_on_submit():
-        f = form.user_file.data
+        f = form.userfile.data
         filename = secure_filename(f.filename)
         f.save(os.path.join(
             app.config['UPLOAD_FOLDER'], filename))
