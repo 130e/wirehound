@@ -1,0 +1,65 @@
+{% extend base.html %}
+
+{% block content %}
+<div class="container">
+	<div class="row clearfix">
+		<div class="col-md-12 column">
+			<div class="jumbotron">
+				<h1>
+					WireHound Filter
+				</h1>
+				<p>
+                    In this page, some basic filters are displayed. You can choose the packets of interest by apply these filters to the original traffic file [{{ filepath }}].
+                </p>
+
+                <form role="form">
+                    <div class="form-group">
+                         <label for="ipfilter">IP Filter</label><input type="text" class="form-control" id="ipfilter" placeholder="IP Address (e.g. 192.168.0.*)"/>
+                    </div>
+                    <div class="form-group">
+                        <label for="portfilter">Port Filter</label><input type="text" class="form-control" id="portfilter" placeholder="Port (e.g. 80,8080,1234-1238)"/>
+                   </div>
+
+
+                    <label for="ptlfilter">Protocol Filter</label><br>
+                    <div class="form-check form-check-inline" id="ptlfilter">
+                        <input class="form-check-input" type="checkbox" id="tcpcheckbox" value="tcpck">
+                        <label class="form-check-label" for="tcpcheckbox">TCP</label>
+                      </div>
+                      <div class="form-check form-check-inline">
+                        <input class="form-check-input" type="checkbox" id="udpcheckbox" value="udpck">
+                        <label class="form-check-label" for="udpcheckbox">UDP</label>
+                      </div>
+                      <div class="form-check form-check-inline">
+                        <input class="form-check-input" type="checkbox" id="icmpcheckbox" value="icmpck">
+                        <label class="form-check-label" for="icmpcheckbox">ICMP</label>
+                      </div>
+            
+
+
+                    <div class="form-group">
+                        <label for="timefilter">Time Filter</label><input type="text" class="form-control" id="timefilter" placeholder="Time (Syntax: lowerBound,upperBound)"/>
+                    </div>
+                    <div class="form-group">
+                        <label for="sizefilter">Size Filter</label><input type="text" class="form-control" id="sizefilter" placeholder="Size (Syntax: lowerBound,upperBound), in Byte(s)"/>
+                    </div>
+
+                    <div class="row clearfix">
+                        <div class="col-md-12 column">
+                            <button type="submit" class="btn btn-outline-primary">Confirm</button>
+                            <button class="btn btn-outline-dark" type="button"> Cancel</button>
+                        </div>
+                    </div>
+
+                </form>
+                
+			
+                
+            </div>
+            
+
+			
+		</div>
+	</div>
+</div>
+{% endblock %}

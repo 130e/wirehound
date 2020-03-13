@@ -1,0 +1,58 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="container">
+  <div class="row clearfix">
+    <div class="col-md-12 column">
+      <div class="jumbotron">
+        <h1>
+          WireHound File Management
+        </h1>
+        Hello, {{ userid }}. This is your private storage of files. <br><br>
+        <h3>
+          File List
+        </h3>
+
+        {% if walkedlist | length == 0 %}
+        <small> You Havn't Uploaded A File Yet </small>
+        {% endif %}
+
+        <div class="list-group">
+          {% for i in walkedlist %}
+          <a href="{{i}}" class="list-group-item"> {{i}} </a>
+          {% endfor %}
+        </div>
+        <div class="row clearfix">
+          <div class="col-md-12 column">
+            <button class="btn btn-outline-primary" data-toggle="modal" data-target="#uploadmodal">Upload</button>
+
+            <!-- Modal -->
+            <div class="modal fade" id="uploadmodal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+              <div class="modal-dialog">
+                <div class="modal-content">
+                  <div class="modal-header">
+
+                    <h4 class="modal-title" id="myModalLabel">Upload A File</h4>
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+
+                  </div>
+                  <div class="modal-body">
+                    Please upload a traffic file (*.pcap)
+                  </div>
+                  <div class="modal-footer">
+                    <label for="inputfile">Choose:</label>
+                    <input type="file" id="inputfile">
+                  </div>
+                </div><!-- /.modal-content -->
+              </div><!-- /.modal -->
+            </div>
+            <button class="btn btn-outline-danger" type="button"> Delete </button>
+          </div>
+        </div>
+
+      </div>
+
+    </div>
+  </div>
+</div>
+{% endblock %}

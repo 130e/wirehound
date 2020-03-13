@@ -1,7 +1,22 @@
 {% extends "base.html" %}
 
-{% set graph_html="graph.html" %}
-
 {% block content %}
-<a href="/graph">see graph</a>
+<button class="btn btn-outline-primary" data-toggle="modal" data-target="#uploadmodal">Upload</button>
+<div class="container-fluid">
+  <div class="row">
+    <div class="col-md-12">
+      <div class="jumbotron">
+        <h2>
+          Hi, {{ current_user.username }}!
+        </h2>
+        <p>
+        Get started with your files.
+        </p>
+        <p>
+        <a class="btn btn-primary btn-large" href="{{ url_for('filepage') }}">My files</a>
+        </p>
+      </div>
+    </div>
+  </div>
+</div>
 {% endblock %}
