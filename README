@@ -1,5 +1,5 @@
-python module:
-```
-pip install flask
-pip install flask-wtf
+## python module:
+
+```python
+pip install flask flask-wtf flask-sqlalchemy flask-migrate
 ```
