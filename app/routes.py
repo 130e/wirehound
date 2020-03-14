@@ -1,9 +1,10 @@
+import os
 from flask import render_template, flash, redirect, url_for, request
 from app import app
-from app.forms import LoginForm, FileForm
+from app import forms
+from app import db
 from werkzeug.utils import secure_filename
 from werkzeug.urls import url_parse
-import os
 from flask_login import current_user, login_user, logout_user, login_required
 from app.models import User
 
@@ -16,21 +17,21 @@ from app.models import User
 @app.route('/filepage', methods=['GET', 'POST'] )
 @login_required
 def index():
-    form = FileForm()
+    form = forms.FileForm()
     if form.validate_on_submit():
         f = form.userfile.data
         filename = secure_filename(f.filename)
         f.save(os.path.join(
             app.config['UPLOAD_FOLDER'], filename))
         return redirect(url_for('index'))
-
-    return render_template('filepage.html', title='My Files', form=form)
+    username = current_user.username
+    return render_template('filepage.html', title='My Files', form=form, userid=username)
 
 @app.route('/login', methods=['GET', 'POST'])
 def login():
     if current_user.is_authenticated:
         return redirect(url_for('index'))
-    form = LoginForm()
+    form = forms.LoginForm()
     # if get or bad form it retuns false
     if form.validate_on_submit():
         user = User.query.filter_by(username=form.username.data).first()
@@ -44,10 +45,35 @@ def login():
         return redirect(next_page)
     return render_template('login.html', title='Sign In', form=form)
 
+@login_required
 @app.route('/logout')
 def logout():
     logout_user()
     return redirect(url_for('index'))
+
+@app.route('/register', methods=['GET', 'POST'])
+def register():
+    if current_user.is_authenticated:
+        return redirect(url_for('index'))
+    form = forms.RegisterForm()
+    if form.validate_on_submit():
+        user = User(username=form.username.data, email=form.email.data)
+        user.set_password(form.password.data)
+        db.session.add(user)
+        db.session.commit()
+        flash('Registration complete! Welcome to Wirehound.')
+        return redirect(url_for('login'))
+    return render_template('register.html', title='Register', form=form)
+
+@login_required
+@app.route('/filter')
+def filter():
+    form = forms.FilterForm()
+    if form.validate_on_submit():
+        # TODO
+        return redirect(url_for('index'))
+
+    return render_template('filterpage.html', title='Select Filter', form=form)
 
 # @app.route('/upload', methods=['GET', 'POST'])
 # @login_required

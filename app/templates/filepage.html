@@ -39,8 +39,6 @@
                   </div>
                   <div class="modal-body">
                     Please upload a traffic file (*.pcap)
-                  </div>
-                  <div class="modal-footer">
                     <form action="filepage" method="post" class="form" role="form" enctype=multipart/form-data>
                       {{ form.hidden_tag() }}
                       {{ wtf.form_errors(form, hiddens="only") }}
@@ -49,6 +47,8 @@
                       {{ wtf.form_field(form.submit, class='form-submit') }}
                       </p>
                     </form>
+                  </div>
+                  <div class="modal-footer">
                   </div>
                 </div><!-- /.modal-content -->
               </div><!-- /.modal -->

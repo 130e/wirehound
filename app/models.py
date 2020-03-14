@@ -25,10 +25,10 @@ def load_user(id):
     # return a user object
     return User.query.get(int(id))
 
-class Folder(db.Model):
-    id = db.Column(db.Integer, primary_key=True)
-    folder_id = db.Column(db.Integer, index=True, unique=True)
-    user_id = db.Column(db.Integer, db.ForeignKey('user.id'))
+# class Folder(db.Model):
+    # id = db.Column(db.Integer, primary_key=True)
+    # folder_id = db.Column(db.Integer, index=True, unique=True)
+    # user_id = db.Column(db.Integer, db.ForeignKey('user.id'))
 
-    def __repr__(self):
-        return '<Folder {}>'.format(self.folder_id)
+    # def __repr__(self):
+        # return '<Folder {}>'.format(self.folder_id)
