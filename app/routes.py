@@ -85,7 +85,7 @@ def filter(file=None):
 
 @login_required
 @app.route('/result/<string:file>')
-def result():
+def result(file=None):
     returngrapoh_path = "/static/mygraph.html"
     return render_template('resultpage.html',filepath=filepath, ret_gpath = returngrapoh_path)
 
