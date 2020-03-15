@@ -17,19 +17,31 @@ from app.models import User
 @app.route('/filepage', methods=['GET', 'POST'] )
 @login_required
 def index():
-    form = forms.FileForm()
+    upform = forms.UploadForm()
     uname = current_user.username
     upath = app.config['UPLOAD_FOLDER_ROOT']+uname
     walkedlist = []
-    if form.validate_on_submit():
-        f = form.userfile.data
-        filename = secure_filename(f.filename)
-        f.save(os.path.join(upath, filename))
-        return redirect(url_for('index'))
     osg = os.walk(upath)
     for _,_,walkedlist in osg:
         pass
-    return render_template('filepage.html',title='My Files', form=form, walkedlist=walkedlist)
+    return render_template('filepage.html',title='My Files', upform=upform, walkedlist=walkedlist)
+
+@app.route('/upload', methods=['POST'] )
+@login_required
+def upload():
+    upform = forms.UploadForm()
+    uname = current_user.username
+    upath = app.config['UPLOAD_FOLDER_ROOT']+uname
+    walkedlist = []
+    osg = os.walk(upath)
+    for _,_,walkedlist in osg:
+        pass
+    if upform.validate_on_submit():
+        f = upform.userfile.data
+        filename = secure_filename(f.filename)
+        f.save(os.path.join(upath, filename))
+        return redirect(url_for('index'))
+    return render_template('filepage.html',title='My Files', upform=upform, walkedlist=walkedlist)
 
 @app.route('/login', methods=['GET', 'POST'])
 def login():

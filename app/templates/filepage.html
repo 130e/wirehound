@@ -72,12 +72,12 @@
                     Please upload a traffic file (*.pcap)
                   </div>
                   <div class="modal-footer">
-                    <form action="filepage" method="post" class="form" role="form" enctype=multipart/form-data>
-                      {{ form.hidden_tag() }}
-                      {{ wtf.form_errors(form, hiddens="only") }}
+                    <form action="{{ url_for('upload') }}" method="post" class="form" role="form" enctype=multipart/form-data>
+                      {{ upform.hidden_tag() }}
+                      {{ wtf.form_errors(upform, hiddens="only") }}
                       <p>
-                      {{ wtf.form_field(form.userfile, class='form-control') }}
-                      {{ wtf.form_field(form.submit, class='form-submit') }}
+                      {{ wtf.form_field(upform.userfile, class='form-control') }}
+                      {{ wtf.form_field(upform.submit, class='form-submit') }}
                       </p>
                     </form>
                   </div>

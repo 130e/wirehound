@@ -12,7 +12,7 @@ class LoginForm(FlaskForm):
     remember_me = BooleanField('Remember Me')
     submit = SubmitField('Sign In')
 
-class FileForm(FlaskForm):
+class UploadForm(FlaskForm):
     userfile = FileField('Traffic file', validators=[FileRequired()])
     submit = SubmitField('Upload')
 
