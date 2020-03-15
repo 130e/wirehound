@@ -16,6 +16,10 @@ class UploadForm(FlaskForm):
     userfile = FileField('Traffic file', validators=[FileRequired()])
     submit = SubmitField('Upload')
 
+class DeleteForm(FlaskForm):
+    fname = BooleanField("")
+    submit = SubmitField("Delete")
+
 class FilterForm(FlaskForm):
    ipfilter = StringField('IP Filter') 
    portfilter = StringField('Port Filter')

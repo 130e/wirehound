@@ -30,17 +30,22 @@
                 <tbody>
                   {% for i in walkedlist %}
                   <tr>
-                    <td>
-                      <div class="form-check">
-                        <input class="form-check-input" type="checkbox" value="" id="cb{{i}}">
-                        <label class="form-check-label" for="cb{{i}}">
-                        </label>
-                      </div>
-                    </td>
 
-                    <td>
-                      <a href = "{{ url_for('filter', file=i) }}">{{i}}</a>
-                    </td>
+
+
+
+                    <form action="{{ url_for('delete') }}" method="post" class="form" role="form" enctype=multipart/form-data>
+                      {{ deform.hidden_tag() }}
+                      <td>
+                        {{ wtf.form_field(deform.fname, class='form-control') }}
+                      </td>
+                      <td>
+                        <a href = "{{ url_for('filter', file=i) }}">{{i}}</a>
+                      </td>
+
+
+                    </form>
+
 
                   </tr>
 

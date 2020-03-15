@@ -18,30 +18,57 @@ from app.models import User
 @login_required
 def index():
     upform = forms.UploadForm()
+    deform = forms.DeleteForm()
+
     uname = current_user.username
     upath = app.config['UPLOAD_FOLDER_ROOT']+uname
     walkedlist = []
     osg = os.walk(upath)
     for _,_,walkedlist in osg:
         pass
-    return render_template('filepage.html',title='My Files', upform=upform, walkedlist=walkedlist)
+
+    return render_template('filepage.html',title='My Files', upform=upform, deform=deform, walkedlist=walkedlist)
 
 @app.route('/upload', methods=['POST'] )
 @login_required
 def upload():
     upform = forms.UploadForm()
+    deform = forms.DeleteForm()
+
     uname = current_user.username
     upath = app.config['UPLOAD_FOLDER_ROOT']+uname
     walkedlist = []
     osg = os.walk(upath)
     for _,_,walkedlist in osg:
         pass
+
     if upform.validate_on_submit():
         f = upform.userfile.data
         filename = secure_filename(f.filename)
         f.save(os.path.join(upath, filename))
         return redirect(url_for('index'))
-    return render_template('filepage.html',title='My Files', upform=upform, walkedlist=walkedlist)
+
+    return render_template('filepage.html',title='My Files', upform=upform, deform=deform, walkedlist=walkedlist)
+
+@app.route('/delete', methods=['POST'] )
+@login_required
+def delete():
+    upform = forms.UploadForm()
+    deform = forms.DeleteForm()
+
+    uname = current_user.username
+    upath = app.config['UPLOAD_FOLDER_ROOT']+uname
+    walkedlist = []
+    osg = os.walk(upath)
+    for _,_,walkedlist in osg:
+        pass
+
+    if deform.validate_on_submit():
+        return redirect(url_for('index'))
+
+    return render_template('filepage.html',title='My Files', upform=upform, deform=deform, walkedlist=walkedlist)
+
+
 
 @app.route('/login', methods=['GET', 'POST'])
 def login():
