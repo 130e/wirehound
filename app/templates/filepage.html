@@ -9,20 +9,73 @@
         <h1>
           WireHound File Management
         </h1>
-        Hello, {{ userid }}. This is your private storage of files. <br><br>
-        <h3>
-          File List
-        </h3>
+        Hello, {{ current_user.username }}. This is your private storage of files. <br><br>
+
 
         {% if walkedlist | length == 0 %}
         <small> You Havn't Uploaded A File Yet </small>
         {% endif %}
+        <script src="https://code.jquery.com/jquery-3.1.1.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-checkbox/1.5.0/js/bootstrap-checkbox.js" integrity="sha256-EHzRVmay+anWq3fNt5n10TSFc0cxzuB5BYOqpM+Vitg=" crossorigin="anonymous"></script>
+        <div class="container">
+          <div class="row clearfix">
+            <div class="col-md-12 column">
+              <table class="table" id="filetable">
+                <thead>
+                  <tr>
+                    <th>Select</th>
+                    <th>Filename</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {% for i in walkedlist %}
+                  <tr>
+                    <td>
 
-        <div class="list-group">
-          {% for i in walkedlist %}
-          <a href="{{i}}" class="list-group-item"> {{i}} </a>
-          {% endfor %}
+                      <div class="form-check">
+                        <input class="form-check-input" type="checkbox" value="" id="cb{{i}}">
+                        <label class="form-check-label" for="cb{{i}}">
+                        </label>
+                      </div>
+                      
+                    </td>
+                    <td>
+                      
+
+
+                      <button type="button" class="btn btn-link" onclick="function()" id="btn{{i}}"> {{i}} </button>
+                      <script type="text/javascript">
+                        function(){
+                          $("#btn{{i}} btn").on("click", function(){
+                           //jQuery.get('/filterpage/{{i}}') 
+                           window.location.href("/filterpage/{{i}}")
+                           /*$.ajax({
+                             type : "GET",
+                             url : "/filterpage/{{i}}",
+                             async : false,
+                             success:function(){
+                               window.location.replace("/filterpage/{{i}}")
+                             },
+                             error : function(){
+                               alert("error")
+                             }
+                           })*/
+                          })
+                        }
+                      </script>
+                    </td>
+                  </tr>
+                    
+                  {% endfor %}
+                </tbody>
+              </table>
+            </div>
+          </div>
         </div>
+
+
+        
+
         <div class="row clearfix">
           <div class="col-md-12 column">
             <button class="btn btn-outline-primary" data-toggle="modal" data-target="#uploadmodal">Upload</button>
@@ -39,6 +92,8 @@
                   </div>
                   <div class="modal-body">
                     Please upload a traffic file (*.pcap)
+                  </div>
+                  <div class="modal-footer">
                     <form action="filepage" method="post" class="form" role="form" enctype=multipart/form-data>
                       {{ form.hidden_tag() }}
                       {{ wtf.form_errors(form, hiddens="only") }}
@@ -47,8 +102,6 @@
                       {{ wtf.form_field(form.submit, class='form-submit') }}
                       </p>
                     </form>
-                  </div>
-                  <div class="modal-footer">
                   </div>
                 </div><!-- /.modal-content -->
               </div><!-- /.modal -->

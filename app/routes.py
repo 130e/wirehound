@@ -18,14 +18,18 @@ from app.models import User
 @login_required
 def index():
     form = forms.FileForm()
+    uname = current_user.username
+    upath = app.config['UPLOAD_FOLDER_ROOT']+uname
+    walkedlist = []
     if form.validate_on_submit():
         f = form.userfile.data
         filename = secure_filename(f.filename)
-        f.save(os.path.join(
-            app.config['UPLOAD_FOLDER'], filename))
+        f.save(os.path.join(upath, filename))
         return redirect(url_for('index'))
-    username = current_user.username
-    return render_template('filepage.html', title='My Files', form=form, userid=username)
+    osg = os.walk(upath)
+    for _,_,walkedlist in osg:
+        pass
+    return render_template('filepage.html',title='My Files', form=form, walkedlist=walkedlist)
 
 @app.route('/login', methods=['GET', 'POST'])
 def login():
@@ -61,19 +65,30 @@ def register():
         user.set_password(form.password.data)
         db.session.add(user)
         db.session.commit()
+        upath = app.config['UPLOAD_FOLDER_ROOT']+user.username
+        os.mkdir(upath)
         flash('Registration complete! Welcome to Wirehound.')
         return redirect(url_for('login'))
     return render_template('register.html', title='Register', form=form)
 
 @login_required
-@app.route('/filter')
+@app.route('/filter/<filename>')
 def filter():
+    targetfile = app.config['UPLOAD_FOLDER_ROOT']+ current_user.username + "/" + filename
     form = forms.FilterForm()
     if form.validate_on_submit():
         # TODO
+        # remember to add filename to result page
         return redirect(url_for('index'))
 
     return render_template('filterpage.html', title='Select Filter', form=form)
+
+@login_required
+@app.route('/result/<filename>')
+def result():
+    returngrapoh_path = "/static/mygraph.html"
+    return render_template('resultpage.html',filepath=filepath, ret_gpath = returngrapoh_path)
+
 
 # @app.route('/upload', methods=['GET', 'POST'])
 # @login_required
