@@ -14,9 +14,9 @@
           {{ form.hidden_tag() }}
           {{ wtf.form_errors(form, hiddens="only") }}
           <p>
-          {{ wtf.form_field(form.username, class='form-control', placeholder='') }}
+          {{ wtf.form_field(form.username, class='form-control', placeholder='Ludwig') }}
           {{ wtf.form_field(form.password, class='form-control', placeholder='6~32 digits') }}
-          {{ wtf.form_field(form.password2, class='form-control') }}
+          {{ wtf.form_field(form.password2, class='form-control', placeholder='Repeat password') }}
           {{ wtf.form_field(form.email, class='form-control', placeholder='Houndmaster@guild.com') }}
           {{ wtf.form_field(form.submit, class='form-submit') }}
           </p>
