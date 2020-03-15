@@ -84,7 +84,7 @@ def filter(file=None):
     return render_template('filterpage.html', title='Select Filter', form=form, file=file)
 
 @login_required
-@app.route('/result/<filename>')
+@app.route('/result/<string:file>')
 def result():
     returngrapoh_path = "/static/mygraph.html"
     return render_template('resultpage.html',filepath=filepath, ret_gpath = returngrapoh_path)
