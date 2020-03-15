@@ -72,16 +72,16 @@ def register():
     return render_template('register.html', title='Register', form=form)
 
 @login_required
-@app.route('/filter/<filename>')
-def filter():
-    targetfile = app.config['UPLOAD_FOLDER_ROOT']+ current_user.username + "/" + filename
+@app.route('/filter/<string:file>', methods=['GET', 'POST'])
+def filter(file=None):
     form = forms.FilterForm()
     if form.validate_on_submit():
+        targetfile = app.config['UPLOAD_FOLDER_ROOT']+ current_user.username + "/" + file
         # TODO
-        # remember to add filename to result page
+        # remember to add file to result page
         return redirect(url_for('index'))
 
-    return render_template('filterpage.html', title='Select Filter', form=form)
+    return render_template('filterpage.html', title='Select Filter', form=form, file=file)
 
 @login_required
 @app.route('/result/<filename>')

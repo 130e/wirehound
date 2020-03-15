@@ -31,41 +31,19 @@
                   {% for i in walkedlist %}
                   <tr>
                     <td>
-
                       <div class="form-check">
                         <input class="form-check-input" type="checkbox" value="" id="cb{{i}}">
                         <label class="form-check-label" for="cb{{i}}">
                         </label>
                       </div>
-                      
                     </td>
+
                     <td>
-                      
-
-
-                      <button type="button" class="btn btn-link" onclick="function()" id="btn{{i}}"> {{i}} </button>
-                      <script type="text/javascript">
-                        function(){
-                          $("#btn{{i}} btn").on("click", function(){
-                           //jQuery.get('/filterpage/{{i}}') 
-                           window.location.href("/filterpage/{{i}}")
-                           /*$.ajax({
-                             type : "GET",
-                             url : "/filterpage/{{i}}",
-                             async : false,
-                             success:function(){
-                               window.location.replace("/filterpage/{{i}}")
-                             },
-                             error : function(){
-                               alert("error")
-                             }
-                           })*/
-                          })
-                        }
-                      </script>
+                      <a href = "{{ url_for('filter', file=i) }}">{{i}}</a>
                     </td>
+
                   </tr>
-                    
+
                   {% endfor %}
                 </tbody>
               </table>
@@ -74,7 +52,7 @@
         </div>
 
 
-        
+
 
         <div class="row clearfix">
           <div class="col-md-12 column">
