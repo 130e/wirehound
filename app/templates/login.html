@@ -14,10 +14,10 @@
           {{ form.hidden_tag() }}
           {{ wtf.form_errors(form, hiddens="only") }}
           <p>
-          {{ wtf.form_field(form.username, class='form-control', placeholder='Username') }}
-          {{ wtf.form_field(form.password, class='form-control', placeholder='Password') }}
-          {{ wtf.form_field(form.remember_me, class='form-checkbox', placeholder='Checkbox') }}
-          {{ wtf.form_field(form.submit, class='form-submit', placeholder='Submit') }}
+          {{ wtf.form_field(form.username, class='form-control', placeholder='Ludwig') }}
+          {{ wtf.form_field(form.password, class='form-control', placeholder='Secret Words') }}
+          {{ wtf.form_field(form.remember_me, class='form-checkbox') }}
+          {{ wtf.form_field(form.submit, class='form-submit') }}
           </p>
         </form>
         <p>New User? <a href="{{ url_for('register') }}">Register here</a></p>

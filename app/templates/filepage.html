@@ -11,47 +11,74 @@
         </h1>
         Hello, {{ current_user.username }}. This is your private storage of files. <br><br>
 
-
-        {% if walkedlist | length == 0 %}
-        <small> You Havn't Uploaded A File Yet </small>
-        {% endif %}
         <script src="https://code.jquery.com/jquery-3.1.1.min.js"></script>
         <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-checkbox/1.5.0/js/bootstrap-checkbox.js" integrity="sha256-EHzRVmay+anWq3fNt5n10TSFc0cxzuB5BYOqpM+Vitg=" crossorigin="anonymous"></script>
+
         <div class="container">
           <div class="row clearfix">
             <div class="col-md-12 column">
-              <table class="table" id="filetable">
-                <thead>
-                  <tr>
-                    <th>Select</th>
-                    <th>Filename</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  {% for i in walkedlist %}
-                  <tr>
+              <button class="btn btn-outline-primary" data-toggle="modal" data-target="#uploadmodal">Upload</button>
 
+              <!-- Modal -->
+              <div class="modal fade" id="uploadmodal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+                <div class="modal-dialog">
+                  <div class="modal-content">
+                    <div class="modal-header">
 
+                      <h4 class="modal-title" id="myModalLabel">Upload A File</h4>
+                      <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
 
+                    </div>
+                    <div class="modal-body">
+                      Please upload a traffic file (*.pcap)
+                    </div>
+                    <div class="modal-footer">
+                      {{ wtf.quick_form(upform, action=url_for('upload'), button_map={'submit': 'primary'}) }}
+                    </div>
+                  </div><!-- /.modal-content -->
+                </div><!-- /.modal -->
+              </div>
+            </div>
+          </div>
+        </div>
 
-                    <form action="{{ url_for('delete') }}" method="post" class="form" role="form" enctype=multipart/form-data>
-                      {{ deform.hidden_tag() }}
+        <div class="container">
+          <div class="row clearfix">
+            <div class="col-md-12 column">
+              <form action="{{ url_for('delete') }}" method="post" class="form" role="form"
+                                                                                enctype=multipart/form-data
+                                                                                button_map={'submit':'danger'}>
+
+                {{ deform.hidden_tag() }}
+                <table class="table" id="filetable">
+                  <thead>
+                    <tr>
+                      <th>Select</th>
+                      <th>Filename</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {% for f in deform %}
+                    {% if f.type == "BooleanField" %}
+                    <tr>
                       <td>
-                        {{ wtf.form_field(deform.fname, class='form-control') }}
+                        {{ f }}
                       </td>
                       <td>
-                        <a href = "{{ url_for('filter', file=i) }}">{{i}}</a>
+                        <a href = "{{ url_for('filter', file=f.label.text) }}">
+                          {{ f.label.text }}
+                        </a>
                       </td>
+                    </tr>
 
+                    {% endif %}
+                    {% endfor %}
 
-                    </form>
+                  </tbody>
+                </table>
 
-
-                  </tr>
-
-                  {% endfor %}
-                </tbody>
-              </table>
+                {{ wtf.form_field(deform.submit, button_map={'submit':'danger'}) }}
+              </form>
             </div>
           </div>
         </div>
@@ -59,39 +86,6 @@
 
 
 
-        <div class="row clearfix">
-          <div class="col-md-12 column">
-            <button class="btn btn-outline-primary" data-toggle="modal" data-target="#uploadmodal">Upload</button>
-
-            <!-- Modal -->
-            <div class="modal fade" id="uploadmodal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-              <div class="modal-dialog">
-                <div class="modal-content">
-                  <div class="modal-header">
-
-                    <h4 class="modal-title" id="myModalLabel">Upload A File</h4>
-                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-
-                  </div>
-                  <div class="modal-body">
-                    Please upload a traffic file (*.pcap)
-                  </div>
-                  <div class="modal-footer">
-                    <form action="{{ url_for('upload') }}" method="post" class="form" role="form" enctype=multipart/form-data>
-                      {{ upform.hidden_tag() }}
-                      {{ wtf.form_errors(upform, hiddens="only") }}
-                      <p>
-                      {{ wtf.form_field(upform.userfile, class='form-control') }}
-                      {{ wtf.form_field(upform.submit, class='form-submit') }}
-                      </p>
-                    </form>
-                  </div>
-                </div><!-- /.modal-content -->
-              </div><!-- /.modal -->
-            </div>
-            <button class="btn btn-outline-danger" type="button"> Delete </button>
-          </div>
-        </div>
 
       </div>
 

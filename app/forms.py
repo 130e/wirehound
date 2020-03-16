@@ -1,7 +1,7 @@
 from flask_wtf import FlaskForm
 from flask_wtf.file import FileField, FileRequired
 
-from wtforms import StringField, PasswordField, BooleanField, SubmitField
+from wtforms import StringField, PasswordField, BooleanField, SubmitField, FieldList, FormField
 from wtforms.validators import ValidationError, DataRequired, Email, EqualTo
 
 from app.models import User
@@ -16,9 +16,16 @@ class UploadForm(FlaskForm):
     userfile = FileField('Traffic file', validators=[FileRequired()])
     submit = SubmitField('Upload')
 
-class DeleteForm(FlaskForm):
-    fname = BooleanField("")
+class DeleteFormBase(FlaskForm):
     submit = SubmitField("Delete")
+
+def DeleteFormBuilder(filelist):
+    class DeleteForm(DeleteFormBase):
+        pass
+    for (i, filename) in enumerate(filelist):
+        setattr(DeleteForm, 'file_%d' % i, BooleanField(label=filename))
+
+    return DeleteForm()
 
 class FilterForm(FlaskForm):
    ipfilter = StringField('IP Filter') 
