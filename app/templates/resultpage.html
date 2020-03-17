@@ -10,7 +10,7 @@
           WireHound Report
         </h1>
         <p>
-          This is the final results analyzed by WireHound. In this page you can view the interactive graph of your file [{{ filepath }}], download
+          This is the final results analyzed by WireHound. In this page you can view the interactive graph of your file [{{ file }}], download
           the graph in JSON/HTML format and download the report showing the metrics of this graph.
         </p>
 
@@ -18,7 +18,7 @@
           <div class="col-md-12 column">
             <div class="main_container">
               <div class="embed-responsive  embed-responsive-16by9" id="embedHtml" align="center" >
-                <iframe src= "{{ ret_gpath }}" width="100%" height="100%" frameborder="1" scrolling="auto" ></iframe>
+                <iframe src= "/display/{{ file }}" width="100%" height="100%" frameborder="1" scrolling="auto" ></iframe>
               </div>
             </div>
           </div>
@@ -31,11 +31,16 @@
               </button>
               <ul class="dropdown-menu">
                   <li><a role="menuitem" href="#"> Report </a></li>
-                  <li><a role="menuitem" href="#"> TDG JSON </a></li>
-                  <li><a role="menuitem" href="#"> Rendered HTML </a></li>
+                  <li><a role="menuitem" href="/download/{{ file }}/json"> TDG JSON </a></li>
+                  <li><a role="menuitem" href="/download/{{ file }}/html"> Rendered HTML </a></li>
               </ul>
       
-              <button class="btn btn-outline-dark" type="button"><em class="glyphicon glyphicon-align-justify"></em> Back to File Management</button>
+              <button class="btn btn-outline-dark" type="button" id="backtoindex"><em class="glyphicon glyphicon-align-justify"></em> Back to File Management</button>
+              <script>
+                document.getElementById('backtoindex').onclick = function backtoindex() {
+                  window.location.replace('/index')
+                }
+              </script>
           </div>
         </div>
        </div>

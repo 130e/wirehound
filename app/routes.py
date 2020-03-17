@@ -1,9 +1,11 @@
 import os
 import re
-from flask import render_template, flash, redirect, url_for, request
+from pathlib import Path
+from flask import render_template, flash, redirect, url_for, request, send_file, send_from_directory, make_response
 from app import app
 from app import forms
 from app import db
+from app import tdg
 from werkzeug.utils import secure_filename
 from werkzeug.urls import url_parse
 from flask_login import current_user, login_user, logout_user, login_required
@@ -12,11 +14,13 @@ from app.models import User
 def getFileList():
     uname = current_user.username
     upath = app.config['UPLOAD_FOLDER_ROOT']+uname
-    walkedlist = []
-    osg = os.walk(upath)
-    for _,_,walkedlist in osg:
-        pass
-    return walkedlist
+    dirs = []
+    for fname in os.listdir(upath):
+        tpath = os.path.join(upath, fname)
+        if not os.path.isdir(tpath):
+            dirs.append(fname)
+
+    return dirs
 
 @app.route('/')
 @app.route('/index')
@@ -104,22 +108,69 @@ def register():
 
 @login_required
 @app.route('/filter/<string:file>', methods=['GET', 'POST'])
-def filter(file=None):
+def filter(file):
     form = forms.FilterForm()
     if form.validate_on_submit():
+        def convertInt(listinput):
+            listoutput = []
+            if len(listinput) ==0 :
+                return None
+            for i in listinput:
+                if len(i) != 0:
+                    listoutput.append(int(i))
+            if len(listoutput) == 2:
+                return tuple(listoutput)
+            elif len(listoutput) == 1:
+                listoutput.append(-1)
+                return tuple(listoutput)
+            elif len(listoutput) >2 :
+                return tuple(listoutput[:2])
+            else:
+                return None
+        t_ipFt = form.ipfilter.data
+        t_portFt = form.portfilter.data
+        t_timeFt = convertInt(form.sizefilter.data.split(','))
+        t_sizeFt = convertInt(form.timefilter.data.split(','))
+        t_protoFt = []
+        if form.tcp.data == True : 
+            t_protoFt.append('TCP')
+        if form.udp.data == True :
+            t_protoFt.append('UDP')
+        if form.icmp.data == True :
+            t_protoFt.append('ICMP')
+        rpath = app.config['UPLOAD_FOLDER_ROOT']+current_user.username+'/'+file + '_result'
+        #os.mkdir(rpath)
+        Path(rpath).mkdir(parents=True, exist_ok=True)
         targetfile = app.config['UPLOAD_FOLDER_ROOT']+ current_user.username + "/" + file
-        # TODO
-        # remember to add file to result page
-        return redirect(url_for('index'))
-
+        tdg_filteredpacket = tdg.Graphware_ReadNFilter(targetfile, ipFilter=t_ipFt, portFilter=t_portFt, timeFilter=t_timeFt,lengthFilter=t_sizeFt,protoFilter=t_protoFt)
+        tdg_resultpath = tdg.Graphware_Generate(tdg_filteredpacket, rpath)
+        return  redirect(url_for('result', file=file))
     return render_template('filterpage.html', title='Select Filter', form=form, file=file)
 
 @login_required
 @app.route('/result/<string:file>')
 def result(file=None):
-    returngrapoh_path = "/static/mygraph.html"
-    return render_template('resultpage.html',filepath=filepath, ret_gpath = returngrapoh_path)
+    return render_template('resultpage.html', file=file)
 
+@login_required
+@app.route('/download/<string:file>/<string:rettype>')
+def download(file,rettype):
+    if rettype not in ['json','html','data']:
+        return '<h1>Format Not Supported</h1> '
+
+    rdir = os.getcwd() + '/app/userfiles/'+current_user.username+'/'+file + '_result/' 
+    rfile = 'efp.' + rettype
+    resp = make_response(send_from_directory(rdir,rfile,as_attachment=True))
+    resp.headers["Content-Disposition"] = "attachment;filename="+rfile+";"
+    return resp
+
+@login_required
+@app.route('/display/<string:file>')
+def display(file):
+    rdir = os.getcwd() + '/app/userfiles/'+current_user.username+'/'+file + '_result/' 
+    rfile = 'efp.html' 
+    resp = make_response(send_from_directory(rdir,rfile,as_attachment=False))
+    return resp
 
 # @app.route('/upload', methods=['GET', 'POST'])
 # @login_required
