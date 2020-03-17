@@ -10,7 +10,7 @@
           WireHound Report
         </h1>
         <p>
-          This is the final results analyzed by WireHound. In this page you can view the interactive graph of your file [{{ file }}], download
+          This is the final results analyzed by WireHound. In this page you can view the interactive graph of your file [{{ filepath }}], download
           the graph in JSON/HTML format and download the report showing the metrics of this graph.
         </p>
 
@@ -30,7 +30,7 @@
               <button type="button" class="btn btn-outline-primary dropdown-toggle" role="menu" data-toggle="dropdown">Download<span class="caret"></span>
               </button>
               <ul class="dropdown-menu">
-                  <li><a role="menuitem" href="#"> Report </a></li>
+                  <li><a role="menuitem" href="/download/{{ file }}/data"> Report </a></li>
                   <li><a role="menuitem" href="/download/{{ file }}/json"> TDG JSON </a></li>
                   <li><a role="menuitem" href="/download/{{ file }}/html"> Rendered HTML </a></li>
               </ul>

@@ -272,7 +272,7 @@ class EFPConverter(object):
         return self.NxObj
     
     def makePyVisObject(self):
-        self.PvObj = pyvis.network.Network(height="100%",width="100%",directed=True,notebook=False,bgcolor="#AAAAAA", font_color="white")
+        self.PvObj = pyvis.network.Network(height="100%",width="100%",directed=True,notebook=False,bgcolor="#222222", font_color="white")
         for v in self.VertexTable:
             self.PvObj.add_node(v.hostID,size=1)
         for e in self.EdgeTable:
@@ -343,6 +343,35 @@ class wEFPConverter(object):
         return self.PvObj
        
 
+def networkxReport(networkxObj,reportFileName=None):
+    import collections
+    report = {}
+    
+    report['density'] = networkx.density(networkxObj)
+    report['degDist'] = {
+        'decription' : "degree distribution",
+        'value': collections.Counter([d for n, d in networkxObj.degree()])
+    }
+    report['RCC'] = {
+        'decription': "For each degree k, the rich-club coefficient is the ratio of the number of actual to the number of potential edges for nodes with degree greater than k",
+        'value': networkx.rich_club_coefficient(networkx.Graph(networkxObj), normalized=True)
+    }
+    report['s-Metric'] = {
+        'decription': "The s-metric is defined as the sum of the products deg(u)*deg(v) for every edge (u,v) in G",
+        'value' : networkx.s_metric(networkxObj, normalized=False)
+    }
+    report['degree-centrality'] = {
+         'decription':"The degree centrality for a node v is the fraction of nodes it is connected to",
+        'value' : networkx.degree_centrality(networkxObj)
+    }
+
+    if reportFileName:
+        f = open(reportFileName, "w")
+        f.write(json.dumps(report))
+        f.close()
+    
+    return report
+
 
 # In[ ]:
 
@@ -361,5 +390,10 @@ def Graphware_Generate(paclist,resultpath):
     #nxb = efpObj.makeNetworkxObject()
     pxb = efpObj.makePyVisObject()
     pxb.write_html(resultpath+"/efp.html")
+
+    pxn = efpObj.makeNetworkxObject()
+    networkxReport(pxn, resultpath+'/efp.data')
+
+    
     return resultpath
 
