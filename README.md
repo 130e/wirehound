@@ -1,4 +1,4 @@
-# A websit
+# A website
 UCR, 2019 
 **Classroom project**
 
